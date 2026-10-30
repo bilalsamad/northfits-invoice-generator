@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NF Invoice Generator</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Invoice ko image (PNG) mein convert karne ke liye -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+  <header class="app-header">
+    <img class="header-logo nf-logo-img" alt="NF">
+    <div>
+      <h1>NF Invoice Generator</h1>
+      <p class="sub">Details bharein &rarr; <strong>Build Invoice</strong> dabaein &rarr; PNG download (size: 11.5" &times; 4.5")</p>
+    </div>
+  </header>
+
+  <!-- ================= FORM (FULL SCREEN) ================= -->
+  <main class="form-wrap">
+    <section class="panel form-panel">
+      <h2 class="section-title">1. Invoice Details</h2>
+
+      <div class="grid-2">
+        <label>Invoice No
+          <input type="text" id="invNo" placeholder="NF-1001">
+        </label>
+        <label>Invoice Date
+          <input type="date" id="invDate">
+        </label>
+      </div>
+
+      <label>Purpose of Payment
+        <input type="text" id="purpose" list="purposeList" placeholder="Order Payment">
+        <datalist id="purposeList">
+          <option value="Order Payment">
+          <option value="Product Sale">
+          <option value="Cash on Delivery">
+          <option value="Advance Payment">
+          <option value="Full Payment">
+        </datalist>
+      </label>
+
+      <h2 class="section-title">2. Customer &amp; Billing Address</h2>
+
+      <label>Customer Name
+        <input type="text" id="customer" placeholder="Customer ka naam">
+      </label>
+
+      <label>Full Address
+        <textarea id="address" rows="2" placeholder="House / Street / Complete address"></textarea>
+      </label>
+
+      <div class="grid-2">
+        <label>Area
+          <input type="text" id="area" placeholder="Area / Mohalla">
+        </label>
+        <label>Landmark
+          <input type="text" id="landmark" placeholder="Famous landmark">
+        </label>
+      </div>
+
+      <label>City
+        <input type="text" id="city" placeholder="City">
+      </label>
+
+      <h2 class="section-title">3. Products</h2>
+
+      <div class="table-scroll">
+        <table class="form-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Product Name</th>
+              <th>Color</th>
+              <th>Size</th>
+              <th>Qty</th>
+              <th>Discount %</th>
+              <th>Per Unit Price</th>
+              <th>Total</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="productRows"></tbody>
+        </table>
+      </div>
+
+      <button type="button" class="btn-add" id="btnAddRow">+ Add Product</button>
+
+      <div class="grid-2 mt-16">
+        <label>DC Charges (Rs.)
+          <input type="number" id="dcCharges" min="0" placeholder="0">
+        </label>
+        <div class="live-total">
+          <span>Net Total</span>
+          <strong id="liveNetTotal">Rs. 0</strong>
+        </div>
+      </div>
+
+      <button type="button" class="btn-build" id="btnBuild">&#9654;&nbsp; Build Invoice</button>
+    </section>
+  </main>
+
+  <!-- ================= PREVIEW OVERLAY (build par khulega) ================= -->
+  <div class="overlay" id="previewOverlay" hidden>
+    <div class="overlay-bar">
+      <span class="overlay-title">Invoice Preview &mdash; Size: 11.5" &times; 4.5" (300 DPI)</span>
+      <div class="overlay-actions">
+        <button type="button" class="btn-download" id="btnDownload">&#11015; Download Image (PNG)</button>
+        <button type="button" class="btn-print" id="btnPrint">&#128424; Print / Save PDF</button>
+        <button type="button" class="btn-close" id="btnClose">&#10005; Edit Form</button>
+      </div>
+    </div>
+
+    <div class="overlay-stage" id="overlayStage">
+      <div class="scaler-wrap" id="scalerWrap">
+        <div class="invoice-scaler" id="invoiceScaler">
+
+          <!-- ============ INVOICE DOCUMENT (fixed 11.5" x 4.5") ============ -->
+          <article class="invoice" id="invoice">
+
+            <div class="inv-inner" id="invInner">
+
+              <header class="inv-header">
+                <div class="bill-to">
+                  <h3 class="box-title">BILL TO</h3>
+                  <p class="cust-name" id="outCustomer">-</p>
+                  <p class="addr-line" id="outAddress" hidden></p>
+                  <p class="addr-line" id="outAreaLandmark" hidden></p>
+                  <p class="addr-line" id="outCity" hidden></p>
+                </div>
+
+                <div class="inv-center">
+                  <img class="nf-logo-img inv-logo" id="nfLogoTop" alt="NF">
+                  <h2 class="inv-heading">INVOICE</h2>
+                </div>
+
+                <div class="inv-meta">
+                  <div class="meta-row">
+                    <span class="meta-label">Invoice No:</span>
+                    <span class="meta-value" id="outInvNo">-</span>
+                  </div>
+                  <div class="meta-row">
+                    <span class="meta-label">Invoice Date:</span>
+                    <span class="meta-value" id="outInvDate">-</span>
+                  </div>
+                  <div class="meta-row">
+                    <span class="meta-label">Purpose of Payment:</span>
+                    <span class="meta-value" id="outPurpose">-</span>
+                  </div>
+                </div>
+              </header>
+
+              <div class="inv-body">
+
+                <div class="inv-left">
+                  <table class="inv-table" id="invTable">
+                    <thead>
+                      <tr>
+                        <th class="c-num">#</th>
+                        <th>Product Name</th>
+                        <th>Color</th>
+                        <th>Size</th>
+                        <th class="c-qty">Qty</th>
+                        <th class="c-disc">Discount</th>
+                        <th class="c-amt">Per Unit Price</th>
+                        <th class="c-amt">Total Price</th>
+                      </tr>
+                    </thead>
+                    <tbody id="outProductRows"></tbody>
+                  </table>
+
+                  <div class="amount-words" id="amountWords">
+                    <span class="aw-label">Amount in Words</span>
+                    <span class="aw-value" id="outAmountWords">-</span>
+                  </div>
+                </div>
+
+                <aside class="inv-summary">
+                  <div class="sum-head">PAYMENT SUMMARY</div>
+                  <div class="sum-row">
+                    <span>Sub Total</span>
+                    <span id="outSubTotal">Rs. 0</span>
+                  </div>
+                  <div class="sum-row">
+                    <span>DC Charges</span>
+                    <span id="outDc">Rs. 0</span>
+                  </div>
+                  <div class="sum-row items">
+                    <span>Total Quantity</span>
+                    <span id="outQty">0</span>
+                  </div>
+                  <div class="sum-row items">
+                    <span>Discount</span>
+                    <span id="outDiscount">-</span>
+                  </div>
+                  <div class="sum-row grand">
+                    <span>NET TOTAL</span>
+                    <span id="outNetTotal">Rs. 0</span>
+                  </div>
+                </aside>
+
+              </div>
+
+            </div>
+
+            <footer class="inv-footer">
+              <p class="foot-line1">NEED HELP? contact us at <strong>+92370-6653839</strong> &nbsp;&bull;&nbsp; Like and follow us at Facebook: <strong>north.fits</strong> and Instagram: <strong>north._fits</strong></p>
+              <p class="foot-line2"><strong>HAVE A GREAT DAY!</strong> &nbsp;&bull;&nbsp; Thanks for shopping at <strong>northfits.vercel.app</strong></p>
+            </footer>
+
+          </article>
+          <!-- ============ /INVOICE DOCUMENT ============ -->
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="logo.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

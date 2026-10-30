@@ -1,0 +1,500 @@
+/* ================= GLOBAL ================= */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  background: #eef1f5;
+  color: #1b1b1b;
+}
+
+body.overlay-open { overflow: hidden; }
+
+/* ================= HEADER ================= */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 26px;
+  background: #fff;
+  border-bottom: 2px solid #111;
+}
+
+.header-logo { height: 44px; }
+
+.app-header h1 { font-size: 19px; letter-spacing: .4px; }
+
+.app-header .sub { font-size: 12px; color: #777; margin-top: 2px; }
+
+/* ================= FORM (FULL SCREEN) ================= */
+.form-wrap {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.panel {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0,0,0,.07);
+  padding: 26px;
+}
+
+.section-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #666;
+  border-bottom: 2px solid #111;
+  padding-bottom: 6px;
+  margin: 22px 0 14px;
+}
+
+.section-title:first-child { margin-top: 0; }
+
+label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 12px;
+}
+
+input, textarea {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  border: 1.5px solid #d5d9de;
+  border-radius: 8px;
+  background: #fbfcfd;
+  outline: none;
+  transition: border-color .15s;
+}
+
+input:focus, textarea:focus { border-color: #111; background: #fff; }
+
+textarea { resize: vertical; }
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.mt-16 { margin-top: 16px; }
+
+/* ---- product table in form ---- */
+.table-scroll { overflow-x: auto; }
+
+.form-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.form-table th {
+  background: #111;
+  color: #fff;
+  padding: 9px 8px;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.form-table td {
+  padding: 5px 5px;
+  border-bottom: 1px solid #e7eaee;
+  vertical-align: middle;
+}
+
+.form-table input {
+  margin-top: 0;
+  padding: 8px 9px;
+  font-size: 13px;
+  min-width: 80px;
+}
+
+.form-table .col-name input { min-width: 160px; }
+
+.form-table .row-total {
+  font-weight: 700;
+  white-space: nowrap;
+  padding-left: 8px;
+}
+
+.form-table .row-num { text-align: center; color: #888; width: 28px; }
+
+.btn-remove {
+  border: none;
+  background: #ffe3e3;
+  color: #c92a2a;
+  width: 27px;
+  height: 27px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.btn-remove:hover { background: #ffc9c9; }
+
+.btn-add {
+  margin-top: 10px;
+  border: 1.5px dashed #111;
+  background: #fff;
+  color: #111;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 9px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-add:hover { background: #111; color: #fff; }
+
+.live-total {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #f4f5f7;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 12.5px;
+  color: #666;
+}
+
+.live-total strong { font-size: 18px; color: #111; margin-top: 2px; }
+
+.btn-build {
+  width: 100%;
+  margin-top: 18px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: .6px;
+  color: #fff;
+  background: #111;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform .1s, background .15s;
+}
+
+.btn-build:hover { background: #000; transform: translateY(-1px); }
+.btn-build:active { transform: translateY(0); }
+
+/* ================= PREVIEW OVERLAY ================= */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(14, 17, 21, .78);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+}
+
+.overlay[hidden] { display: none; }
+
+.overlay-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 20px;
+  background: #111;
+  color: #fff;
+  flex-wrap: wrap;
+}
+
+.overlay-title { font-size: 12.5px; font-weight: 600; letter-spacing: .5px; color: #ddd; }
+
+.overlay-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.btn-download, .btn-print, .btn-close {
+  padding: 9px 15px;
+  font-size: 12.5px;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-download { background: #fff; color: #111; }
+.btn-download:hover { background: #e9e9e9; }
+.btn-download:disabled { opacity: .6; cursor: wait; }
+
+.btn-print { background: #2e2e2e; color: #fff; }
+.btn-print:hover { background: #3d3d3d; }
+
+.btn-close { background: #c92a2a; color: #fff; }
+.btn-close:hover { background: #a92323; }
+
+.overlay-stage {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px;
+}
+
+.scaler-wrap { position: relative; }
+
+.invoice-scaler { transform-origin: top left; }
+
+/* ================= INVOICE DOCUMENT =================
+   Fixed size: 1104 x 432 px  (= 11.5" x 4.5" at 96 DPI)
+   PNG mein 3.125x scale = 3450 x 1350 px = 11.5" x 4.5" @ 300 DPI
+===================================================== */
+.invoice {
+  width: 1104px;                       /* box-sizing: border-box -> exact 11.5" x 4.5" */
+  height: 432px;
+  background: #fff;
+  color: #111;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 3px solid #111;              /* image ke andar hi border, size bilkul exact */
+  box-shadow: 0 12px 44px rgba(0,0,0,.4);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.inv-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ---- header: bill-to | logo | meta ---- */
+.inv-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 20px;
+  padding: 13px 28px 10px;
+  border-bottom: 2.5px solid #111;
+}
+
+.box-title {
+  font-size: 9px;
+  letter-spacing: 1.6px;
+  color: #111;
+  margin-bottom: 3px;
+}
+
+.cust-name { font-size: 13.5px; font-weight: 800; margin-bottom: 2px; }
+
+.addr-line { font-size: 10.5px; color: #111; line-height: 1.45; }
+
+.inv-center { text-align: center; }
+
+.inv-logo { height: 56px; display: block; margin: 0 auto; }
+
+.inv-heading {
+  font-size: 12.5px;
+  letter-spacing: 6px;
+  font-weight: 700;
+  margin-top: 3px;
+  padding-left: 6px; /* letter-spacing ki wajah se optical centering */
+}
+
+.inv-meta { justify-self: end; }
+
+.meta-row {
+  display: flex;
+  font-size: 10.5px;
+  padding: 1.5px 0;
+}
+
+.meta-label { font-weight: 700; min-width: 118px; color: #111; }
+.meta-value { color: #111; }
+
+/* ---- body: table (left) + payment summary (right) ---- */
+.inv-body {
+  flex: 1;
+  display: flex;
+  gap: 18px;
+  padding: 12px 26px 14px;
+  min-height: 0;                       /* flex children ko extra space milegi */
+}
+
+.inv-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.inv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  table-layout: fixed;
+}
+
+.inv-table th {
+  background: #111;
+  color: #fff;
+  padding: 6px 8px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .3px;
+  white-space: nowrap;
+}
+
+.inv-table td {
+  height: 22px;
+  padding: 4px 8px;
+  border-bottom: 1px solid #111;
+  color: #111;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* zebra shading hata di - print mein grey background blur hota hai */
+.inv-table tbody tr:nth-child(even) { background: #fff; }
+
+/* empty filler rows ab nahi lagti (sirf product rows) */
+
+/* dense mode - bohot saare items hone par rows/font chhote */
+.inv-table.dense { font-size: 9.5px; }
+.inv-table.dense th { font-size: 9px; padding: 4px 7px; }
+.inv-table.dense td { padding: 1px 7px; }
+.inv-table.dense .amount-words { margin-top: 6px; }
+
+/* column widths + alignment (8 columns) */
+.inv-table th:nth-child(1), .inv-table td:nth-child(1) { width: 36px; text-align: center; }
+.inv-table th:nth-child(3), .inv-table td:nth-child(3) { width: 95px; }
+.inv-table th:nth-child(4), .inv-table td:nth-child(4) { width: 82px; }
+.inv-table th:nth-child(5), .inv-table td:nth-child(5) { width: 54px; text-align: center; }
+.inv-table th:nth-child(6), .inv-table td:nth-child(6) { width: 80px; text-align: center; }
+.inv-table th:nth-child(7), .inv-table td:nth-child(7) { width: 112px; text-align: right; }
+.inv-table th:nth-child(8), .inv-table td:nth-child(8) { width: 112px; text-align: right; }
+
+/* amount in words - table ke neeche */
+.amount-words {
+  margin-top: 10px;
+  border: 1.5px solid #111;
+  border-left: 4px solid #111;
+  border-radius: 4px;
+  padding: 6px 12px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.aw-label {
+  font-size: 8.5px;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  color: #111;
+}
+
+.aw-value { font-size: 10.5px; font-weight: 600; color: #111; }
+
+/* payment summary card (table ke bagal mein, poori height) */
+.inv-summary {
+  width: 252px;
+  flex: none;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  border: 1.5px solid #111;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.sum-head {
+  background: #111;
+  color: #fff;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-align: center;
+  padding: 6px 10px;
+}
+
+.sum-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11.5px;
+  padding: 7px 12px;
+  border-bottom: 1px solid #111;
+}
+
+.sum-row span:first-child { color: #111; font-weight: 600; }
+.sum-row span:last-child  { color: #111; font-weight: 700; }
+
+.sum-row.items {
+  font-size: 10px;
+  color: #111;
+  padding: 5px 12px;
+}
+
+.sum-row.items span:first-child { color: #111; font-weight: 500; }
+.sum-row.items span:last-child  { color: #111; font-weight: 600; }
+
+.sum-row.grand {
+  margin-top: auto;                    /* hamesha card ke bilkul neeche */
+  background: #111;
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+  border-bottom: none;
+  padding: 10px 12px;
+  letter-spacing: .3px;
+}
+
+.sum-row.grand span:first-child,
+.sum-row.grand span:last-child { color: #fff; }
+
+.sum-row.grand span:first-child { font-size: 11px; letter-spacing: 1.4px; }
+
+/* ---- footer ---- */
+.inv-footer {
+  background: #111;
+  color: #fff;
+  text-align: center;
+  padding: 8px 20px 9px;
+}
+
+.foot-line1 { font-size: 10.5px; color: #fff; }
+.foot-line2 { font-size: 10px; color: #fff; margin-top: 2px; }
+
+.foot-line1 strong, .foot-line2 strong { color: #fff; }
+
+/* ================= PRINT (exact 11.5" x 4.5") ================= */
+@media print {
+  @page { size: 11.5in 4.5in; margin: 0; }
+
+  /* backgrounds/borders print mein bhi chhapen */
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  body { background: #fff; }
+  body * { visibility: hidden; }
+
+  .overlay { position: static; background: none; display: block; }
+  .overlay-bar { display: none; }
+  .overlay-stage { padding: 0; overflow: visible; display: block; }
+  .scaler-wrap { width: auto !important; height: auto !important; }
+  .invoice-scaler { transform: none !important; }
+
+  .invoice, .invoice * { visibility: visible; }
+  .invoice {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 11.5in;
+    height: 4.5in;
+    box-shadow: none;
+  }
+}
